@@ -354,14 +354,40 @@ elif Payments == 'Users':
     st.plotly_chart(fig_map_user)    
 
     st.subheader(f"{selected_year} {selected_quarter} Top Registered Users in Each state by District and pincode") 
+    
+    tab1, tab3 = st.tabs(["Top District in Each State by selection","Top District in Each State"])
+    tab2, tab4 = st.tabs(["Top Pincode's in Each State by selection","Top Pincode's in Each State"])
 
-    tab1, tab2 = st.tabs(["Top District in Each State", "Top Pincode's in Each State"])
+
+    selected_states_tab1 = tab1.selectbox("**Select State for Top Transaction by District**", state)
+    selected_states_tab2 = tab2.selectbox("**Select State for Top Transaction by Pincode**", state) 
+    
+    top_user_dist_df1 = top_user_dist_df[(top_user_dist_df['year']==selected_year) & (top_user_dist_df['quarter']==selected_quarter) & (top_user_dist_df['state']== selected_states_tab1)].reset_index(drop=True)
+    fig_bar_top_dist = px.bar(
+        top_user_dist_df1,
+        x = 'dist_name',
+        y = 'registered_users',
+        text_auto='.2s',
+        color_continuous_scale="Portland",
+        title=f'Top District in "{selected_states_tab1}_{selected_quarter}_{selected_year}"'
+        )
+    fig_bar_top_dist.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+    tab1.plotly_chart(fig_bar_top_dist)     
+    
+    top_user_pincode_df1 = top_user_pincode_df[(top_user_pincode_df['year']==selected_year) & (top_user_pincode_df['quarter']==selected_quarter) & (top_user_pincode_df['state']== selected_states_tab2)].reset_index(drop=True)
+    top_user_pincode_df1.index = top_user_pincode_df1.index + 1
+
+    top_user_pincode_df1.index = top_user_pincode_df1.index.rename("Sl.No")
+
+    tab2.markdown(f'**Top Pincodes in "{selected_states_tab2}_{selected_quarter}_{selected_year}"**')
+    tab2.dataframe(top_user_pincode_df1[['pincode','registered_users']],use_container_width=True)
+
     
 
     for i in state:
-        top_user_dist_df1 = top_user_dist_df[(top_user_dist_df['year']==selected_year) & (top_user_dist_df['quarter']==selected_quarter) & (top_user_dist_df['state']== i)].reset_index(drop=True)
+        top_user_dist_df2 = top_user_dist_df[(top_user_dist_df['year']==selected_year) & (top_user_dist_df['quarter']==selected_quarter) & (top_user_dist_df['state']== i)].reset_index(drop=True)
         fig_bar_top_dist = px.bar(
-            top_user_dist_df1,
+            top_user_dist_df2,
             x = 'dist_name',
             y = 'registered_users',
             text_auto='.2s',
@@ -369,13 +395,13 @@ elif Payments == 'Users':
             title=f'Top District in "{i}_{selected_quarter}_{selected_year}"'
             )
         fig_bar_top_dist.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
-        tab1.plotly_chart(fig_bar_top_dist) 
+        tab3.plotly_chart(fig_bar_top_dist) 
 
     for i in state:
-        top_user_pincode_df1 = top_user_pincode_df[(top_user_pincode_df['year']==selected_year) & (top_user_pincode_df['quarter']==selected_quarter) & (top_user_pincode_df['state']== i)].reset_index(drop=True)
-        top_user_pincode_df1.index = top_user_pincode_df1.index + 1
+        top_user_pincode_df2 = top_user_pincode_df[(top_user_pincode_df['year']==selected_year) & (top_user_pincode_df['quarter']==selected_quarter) & (top_user_pincode_df['state']== i)].reset_index(drop=True)
+        top_user_pincode_df2.index = top_user_pincode_df2.index + 1
 
-        top_user_pincode_df1.index = top_user_pincode_df1.index.rename("Sl.No")
+        top_user_pincode_df2.index = top_user_pincode_df2.index.rename("Sl.No")
 
-        tab2.markdown(f'**Top Pincodes in "{i}_{selected_quarter}_{selected_year}"**')
-        tab2.dataframe(top_user_pincode_df1[['pincode','registered_users']],use_container_width=True)
+        tab4.markdown(f'**Top Pincodes in "{i}_{selected_quarter}_{selected_year}"**')
+        tab4.dataframe(top_user_pincode_df1[['pincode','registered_users']],use_container_width=True)
