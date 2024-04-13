@@ -8,7 +8,7 @@ This project provides interactive data visualizations and insights into PhonePe'
 ### Data Extraction and Transformation (ETL):
 - Extracts data from the PhonePe Pulse GitHub repository (instructions provided below).
 - Applies necessary data cleaning and transformation steps.
-- For detailed information on specific functions or configurations, refer to the provided Python scripts (main.ipynb).
+- For detailed information on specific functions or configurations, refer to the provided Python scripts [main.ipynb].
 - Feel free to modify the project to suit your specific needs and customizations.
 
 ### Exploratory Data Analysis (EDA):
